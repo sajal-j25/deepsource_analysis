@@ -118,7 +118,4 @@ public class CauchyDistributionTest extends RealDistributionAbstractTest {
         Assert.assertTrue(Double.isNaN(dist.getNumericalMean()));
         Assert.assertTrue(Double.isNaN(dist.getNumericalVariance()));
     }
-
-    @Test
-    public void testSampling() {} // Fails in super class
 }

@@ -14,20 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.math3.optimization.direct;
+package org.apache.commons.math3.optim.nonlinear.scalar.noderiv;
 
 import java.util.Arrays;
 import java.util.Random;
-
 import org.apache.commons.math3.analysis.MultivariateFunction;
 import org.apache.commons.math3.exception.DimensionMismatchException;
 import org.apache.commons.math3.exception.TooManyEvaluationsException;
 import org.apache.commons.math3.exception.NumberIsTooLargeException;
 import org.apache.commons.math3.exception.NumberIsTooSmallException;
-import org.apache.commons.math3.optimization.GoalType;
-import org.apache.commons.math3.optimization.PointValuePair;
-import org.apache.commons.math3.optimization.InitialGuess;
-import org.apache.commons.math3.optimization.SimpleBounds;
+import org.apache.commons.math3.optim.MaxEval;
+import org.apache.commons.math3.optim.nonlinear.scalar.ObjectiveFunction;
+import org.apache.commons.math3.optim.nonlinear.scalar.GoalType;
+import org.apache.commons.math3.optim.PointValuePair;
+import org.apache.commons.math3.optim.InitialGuess;
+import org.apache.commons.math3.optim.SimpleBounds;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -178,18 +179,15 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testDiffPow() {}
-// Defects4J: flaky method
-//     @Test
-//     public void testDiffPow() {
-//         double[] startPoint = point(DIM/2,1.0);
-//         double[][] boundaries = null;
-//         PointValuePair expected =
-//             new PointValuePair(point(DIM/2,0.0),0.0);
-//         doTest(new DiffPow(), startPoint, boundaries,
-//                 GoalType.MINIMIZE, 
-//                 1e-8, 1e-1, 12000, expected);
-//     }
+    public void testDiffPow() {
+        double[] startPoint = point(DIM/2,1.0);
+        double[][] boundaries = null;
+        PointValuePair expected =
+            new PointValuePair(point(DIM/2,0.0),0.0);
+        doTest(new DiffPow(), startPoint, boundaries,
+                GoalType.MINIMIZE, 
+                1e-8, 1e-1, 12000, expected);
+    }
 
     @Test
     public void testSsDiffPow() {
@@ -203,18 +201,15 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testAckley() {}
-// Defects4J: flaky method
-//     @Test
-//     public void testAckley() {
-//         double[] startPoint = point(DIM,0.1);
-//         double[][] boundaries = null;
-//         PointValuePair expected =
-//             new PointValuePair(point(DIM,0.0),0.0);
-//         doTest(new Ackley(), startPoint, boundaries,
-//                 GoalType.MINIMIZE,
-//                 1e-8, 1e-5, 1000, expected);
-//     }
+    public void testAckley() {
+        double[] startPoint = point(DIM,0.1);
+        double[][] boundaries = null;
+        PointValuePair expected =
+            new PointValuePair(point(DIM,0.0),0.0);
+        doTest(new Ackley(), startPoint, boundaries,
+                GoalType.MINIMIZE,
+                1e-8, 1e-5, 1000, expected);
+    }
 
     @Test
     public void testRastrigin() {
@@ -322,19 +317,20 @@ public class BOBYQAOptimizerTest {
 //         System.out.println(func.getClass().getName() + " BEGIN"); // XXX
 
         int dim = startPoint.length;
-//        MultivariateOptimizer optim =
-//            new PowellOptimizer(1e-13, Math.ulp(1d));
-//        PointValuePair result = optim.optimize(100000, func, goal, startPoint);
-        final double[] lB = boundaries == null ? null : boundaries[0];
-        final double[] uB = boundaries == null ? null : boundaries[1];
         final int numIterpolationPoints = 2 * dim + 1 + additionalInterpolationPoints;
         BOBYQAOptimizer optim = new BOBYQAOptimizer(numIterpolationPoints);
         PointValuePair result = boundaries == null ?
-            optim.optimize(maxEvaluations, func, goal,
+            optim.optimize(new MaxEval(maxEvaluations),
+                           new ObjectiveFunction(func),
+                           goal,
+                           SimpleBounds.unbounded(dim),
                            new InitialGuess(startPoint)) :
-            optim.optimize(maxEvaluations, func, goal,
+            optim.optimize(new MaxEval(maxEvaluations),
+                           new ObjectiveFunction(func),
+                           goal,
                            new InitialGuess(startPoint),
-                           new SimpleBounds(lB, uB));
+                           new SimpleBounds(boundaries[0],
+                                            boundaries[1]));
 //        System.out.println(func.getClass().getName() + " = " 
 //              + optim.getEvaluations() + " f(");
 //        for (double x: result.getPoint())  System.out.print(x + " ");

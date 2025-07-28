@@ -178,18 +178,15 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testDiffPow() {}
-// Defects4J: flaky method
-//     @Test
-//     public void testDiffPow() {
-//         double[] startPoint = point(DIM/2,1.0);
-//         double[][] boundaries = null;
-//         PointValuePair expected =
-//             new PointValuePair(point(DIM/2,0.0),0.0);
-//         doTest(new DiffPow(), startPoint, boundaries,
-//                 GoalType.MINIMIZE, 
-//                 1e-8, 1e-1, 12000, expected);
-//     }
+    public void testDiffPow() {
+        double[] startPoint = point(DIM/2,1.0);
+        double[][] boundaries = null;
+        PointValuePair expected =
+            new PointValuePair(point(DIM/2,0.0),0.0);
+        doTest(new DiffPow(), startPoint, boundaries,
+                GoalType.MINIMIZE, 
+                1e-8, 1e-1, 12000, expected);
+    }
 
     @Test
     public void testSsDiffPow() {
@@ -203,18 +200,15 @@ public class BOBYQAOptimizerTest {
     }
 
     @Test
-    public void testAckley() {}
-// Defects4J: flaky method
-//     @Test
-//     public void testAckley() {
-//         double[] startPoint = point(DIM,0.1);
-//         double[][] boundaries = null;
-//         PointValuePair expected =
-//             new PointValuePair(point(DIM,0.0),0.0);
-//         doTest(new Ackley(), startPoint, boundaries,
-//                 GoalType.MINIMIZE,
-//                 1e-8, 1e-5, 1000, expected);
-//     }
+    public void testAckley() {
+        double[] startPoint = point(DIM,0.1);
+        double[][] boundaries = null;
+        PointValuePair expected =
+            new PointValuePair(point(DIM,0.0),0.0);
+        doTest(new Ackley(), startPoint, boundaries,
+                GoalType.MINIMIZE,
+                1e-8, 1e-5, 1000, expected);
+    }
 
     @Test
     public void testRastrigin() {
